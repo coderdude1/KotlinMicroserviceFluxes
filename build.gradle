@@ -40,9 +40,9 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+    //comented out utnil simpe webapp is working
+//    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
     compile('org.springframework.boot:spring-boot-starter-webflux')
 
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
@@ -51,14 +51,39 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect")
     compile "org.codehaus.groovy:groovy-all:2.5.2"
 
+    //not sure if needed yet part of api test example
+    compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.7.1'
+
     testCompile "org.spockframework:spock-core:1.1-groovy-2.5.2"
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
     testCompile('io.projectreactor:reactor-test')
 
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+    testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
+
     //Optional spock deps
     //https://github.com/spockframework/spock-example/blob/master/build.gradle
     testRuntime "net.bytebuddy:byte-buddy:1.6.5"          // allows mocking of classes (in addition to interfaces)
     testRuntime "org.objenesis:objenesis:2.5.1"    // allows mocking of classes without default constructor (together with CGLIB)
+
+    sourceSets {
+        acceptance {
+            groovy.srcDir file('src/acceptance/groovy')
+            resources.srcDir file('src/acceptance/resources')
+            compileClasspath += sourceSets.test.compileClasspath
+            runtimeClasspath += sourceSets.test.runtimeClasspath
+        }
+    }
+
+    task runAcceptance(type: Test) {
+        description = 'Runs the acceptance tests'
+        systemProperties System.properties
+        group = 'verification'
+        testClassesDirs = sourceSets.acceptance.output.classesDirs
+        classpath = sourceSets.acceptance.runtimeClasspath
+        reports.junitXml.destination = new File(buildDir, 'groovy/acceptance-results')
+        reports.html.destination = new File(buildDir, 'groovy/reports/acceptance')
+    }
 }
