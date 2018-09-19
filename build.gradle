@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.61'
+        kotlinVersion = '1.2.70'
         springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
@@ -49,7 +49,8 @@ dependencies {
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile "org.codehaus.groovy:groovy-all:2.5.2"
+    //2.5.2 fails with Caused by: java.lang.ClassNotFoundException: org.codehaus.groovy.ast.MethodCallTransformation
+    compile "org.codehaus.groovy:groovy-all:2.4.2"
 
     //not sure if needed yet part of api test example
     compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.7.1'
@@ -83,7 +84,7 @@ dependencies {
         group = 'verification'
         testClassesDirs = sourceSets.acceptance.output.classesDirs
         classpath = sourceSets.acceptance.runtimeClasspath
-        reports.junitXml.destination = new File(buildDir, 'groovy/acceptance-results')
-        reports.html.destination = new File(buildDir, 'groovy/reports/acceptance')
+        reports.junitXml.setDestination(new File(buildDir, 'groovy/acceptance-results'))
+        reports.html.setDestination(new File(buildDir, 'groovy/reports/acceptance'))
     }
 }
