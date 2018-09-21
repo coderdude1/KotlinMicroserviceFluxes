@@ -1,13 +1,17 @@
 package com.dood.tdd.kotlinmicroservice.user
 
 import com.dood.tdd.kotlinmicroservice.users.model.User
-import groovyx.net.http.ContentType
 import groovyx.net.http.RESTClient
+import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus
+import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Specification
 
 class UserAcceptanceSpec extends Specification {
 
+    //first attempt before switching to WebClient.  keeping it here for posterity
     RESTClient restClient = new RESTClient("http://localhost:8080")
+    WebClient webClient = WebClient.create("http://localhost:8080/api")
 
     def setup() {
         restClient.handler.failure = { resp, data ->
@@ -25,21 +29,17 @@ class UserAcceptanceSpec extends Specification {
         def user = new User('blarg', 'firstName', 'lastName')
 
         when:
-//        def response = restClient.post(path : 'orders',
-//                requestContentType : ContentType.JSON,
-//                headers : ['Content-Type' : "application/json"],
-//                body    : [ 'id'    :   user.id,
-//                            'firstName' : user.firstName,
-//                            'lastNAME' : user.lastName])
-
-        def response
+        def response = webClient.post()
+                                .uri("/user/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .syncBody(user)
+                                .exchange()
+                                .block() //get the ClientResponse so we can check status
 
         then:
         response
-        response.status == 200
-        //I kknow there is a way to serailze this into a User
-        response.data[0].id == user.id
-        response.data[0].firstName == user.firstName
-        response.data[0].lastName == user.lastName
+        response.statusCode() == HttpStatus.OK
+        User retval = response.bodyToMono(User.class).block()
+        retval == user
     }
 }
