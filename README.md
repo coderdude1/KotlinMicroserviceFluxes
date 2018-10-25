@@ -18,6 +18,12 @@ testing with WebClient and WebTestClient
 https://www.baeldung.com/spring-5-webclient
 https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
 
+This has some nice examples of WebClient, including the GET, PUT, POST, and DELETE
+https://dzone.com/articles/doing-stuff-with-spring-webflux
+
+Very good overview of webflux/reactive, mentions kotlin 
+http://projectreactor.io/docs/core/release/reference/
+
 # Issues
 1. finding issues testing spring webflux with spock
 

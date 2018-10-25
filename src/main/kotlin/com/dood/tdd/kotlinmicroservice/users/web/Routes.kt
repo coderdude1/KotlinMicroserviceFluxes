@@ -7,13 +7,13 @@ fun router(userHandler: UserHandler) = router {
     accept(APPLICATION_JSON).nest {
         "/api".nest {
             "/users".nest {
-                                GET("/", userHandler::getAllItems)
+                GET("/", userHandler::getAllUsers)
             }
             "/user".nest {
                 //                PUT("/{id}", userHandler::updateItem)
 //                GET("/{id}", userHandler::getItem)
-//                POST("/add", userHandler::addItem)
-                POST("/", userHandler::addItem)
+//                POST("/add", userHandler::addUser)
+                POST("/", userHandler::addUser)
             }
         }
     }
