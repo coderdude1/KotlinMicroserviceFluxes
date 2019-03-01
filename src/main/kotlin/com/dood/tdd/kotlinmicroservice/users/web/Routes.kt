@@ -1,5 +1,6 @@
 package com.dood.tdd.kotlinmicroservice.users.web
 
+import com.dood.tdd.kotlinmicroservice.users.handlers.UserHandler
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.server.router
 

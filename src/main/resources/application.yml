@@ -1,3 +1,13 @@
 context:
   initializer:
     classes:  com.dood.tdd.kotlinmicroservice.users.config.Beans
+
+#need to figure out how to override the default mongo stuff.
+spring:
+  data:
+    mongodb:
+      database: reactiveKotlinExperiment
+#      username: user # TODO need to enable mongo auth, create user/pass/roles, etc
+#      password: password
+#      host: localhost # default is good, but will use this with docker
+#      port: 27017
