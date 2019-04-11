@@ -1,21 +1,32 @@
 package com.dood.tdd.kotlinmicroservice.users.config
 
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
+import springfox.documentation.service.ApiInfo
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
 
-//@Configuration
-//@EnableSwagger2WebFlux
-//class SwaggerConfiguration {
-//
-//    @Bean
-//    fun api(): Docket = Docket(DocumentationType.SWAGGER_2)
-//            .select()
-//            .apis(RequestHandlerSelectors.any())
-//            .paths(PathSelectors.any())
-//            .build()
-//}
+@Configuration
+@EnableSwagger2WebFlux
+@ComponentScan("com.dood.tdd.kotlinmicroservice.users.web")
+class SwaggerConfig {
+    @Bean
+    fun api(): Docket {
+        return Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+//                .apis(RequestHandlerSelectors.basePackage("com.dood.tdd.kotlinmicroservice.users.web"))
+
+                .paths(PathSelectors.any())
+                .build().apiInfo(ApiInfo.DEFAULT)
+    }
+
+
+    /*
+    https://github.com/springfox/springfox/issues/2360
+     */
+}

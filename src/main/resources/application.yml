@@ -11,3 +11,8 @@ spring:
 #      password: password
 #      host: localhost # default is good, but will use this with docker
 #      port: 27017
+
+logging:
+  level:
+    org:
+      apache: DEBUG

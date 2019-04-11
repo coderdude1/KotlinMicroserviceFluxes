@@ -28,8 +28,22 @@ Very good overview of webflux/reactive, mentions kotlin
 http://projectreactor.io/docs/core/release/reference/
 
 
-Swagger
+# Swagger
 https://github.com/springfox/springfox/tree/master/springfox-spring-webflux
+
+swagger with webfluxes
+https://github.com/springfox/springfox/issues/1773  check the last entry for 3 pom entries, and one config
+    No operations defined in spec!
+
+
+I think it does not recognize the spring kotlin DSL for routes.  it looks for @RestController
+
+This https://dzone.com/articles/build-rest-apis-with-kotlin-spring-5-webflux-and-p looks like it shows a way to make
+it work.  He uses the OpenAPI swagger stuff
+## Issues
+not sure if kotlin or my base url path for the only controller.  I get the swagger ui page but not the controller
+and it's endpoints.  It doesn't see it for some reason
+
 
 #Interesting notes
 1. spring has a kotlin Bean definition DSL, router DSL
@@ -39,6 +53,15 @@ https://github.com/springfox/springfox/tree/master/springfox-spring-webflux
 # Issues
 1. finding issues testing spring webflux with spock
 
+## Swagger, Kotlin, and webfluxes
+1.  had to load the 3.0 snapshot version of springfox, most articles/issue trackers mention it makes it easier
+to use webfluxes
+1.  I got it to work, mostly.  It seems to not be able to read the new spring kotlin DSL for controllers.
+a solution I've read about seems to be using the openAPI api.json stuff
+    * https://github.com/springfox/springfox/issues/1773
+    * https://github.com/springfox/springfox/issues/2360
+    * https://springfox.github.io/springfox/docs/snapshot/#docket-spring-java-configuration 6.8.2
+    * Check this out?  https://piotrminkowski.wordpress.com/2019/01/15/kotlin-microservice-with-spring-boot/
 # TODOS
 1. add actuator endpoints
 1. reactive - started
