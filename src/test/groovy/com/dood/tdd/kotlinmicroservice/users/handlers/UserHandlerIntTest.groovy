@@ -10,7 +10,7 @@ import spock.lang.Specification
 import java.util.stream.Collectors
 
 // https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/html/boot-features-testing.html
-//@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class) //This breaks stuff with spock
 @DataMongoTest
 class UserHandlerIntSpec extends Specification {
     @Autowired
