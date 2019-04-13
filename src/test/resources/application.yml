@@ -1,0 +1,7 @@
+spring:
+  mongodb:
+#    embedded:
+#      version: 4.0.3 //did not work with flapdoodle.  TODO.md has a note on how to use Mongo 4
+  data:
+    mongodb:
+      database: reactusers

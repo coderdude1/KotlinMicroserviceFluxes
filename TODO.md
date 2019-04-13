@@ -11,3 +11,7 @@ it works from a browser.  WebClient fails
     1. Got the basic tests running. 
         1. not sure what db/collection is getting used.  I do get stuff creatd with ids
         1. figure out how to test with the flux/monos object
+        1. figure out how to get mongo 4.x
+        `		EnumSet<Feature> features = Version.Main.PRODUCTION.getFeatures();
+         		IFeatureAwareVersion iFeatureAwareVersion = Versions.withFeatures(new GenericVersion("4.0.2"), features);
+`

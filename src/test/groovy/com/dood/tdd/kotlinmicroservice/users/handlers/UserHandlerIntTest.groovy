@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.data.mongodb.core.MongoTemplate
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 // https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/html/boot-features-testing.html
 //@RunWith(SpringRunner.class)
 @DataMongoTest
@@ -37,7 +39,12 @@ class UserHandlerIntSpec extends Specification {
 
         then:
         results != null
-
+        List<User> users = results.toStream().collect(Collectors.toList()) //probably a better way to do this, still learning
+        users.size() == 4
+        users.contains(userOne)
+        users.contains(userTwo)
+        users.contains(userThree)
+        users.contains(userFour)
     }
 
     private def createUser(def firstName, def lastName) {
