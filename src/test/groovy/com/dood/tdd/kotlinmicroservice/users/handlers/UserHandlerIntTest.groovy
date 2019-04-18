@@ -5,12 +5,14 @@ import com.dood.tdd.kotlinmicroservice.users.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.test.annotation.DirtiesContext
 import spock.lang.Specification
 
 import java.util.stream.Collectors
 
 // https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/html/boot-features-testing.html
 //@RunWith(SpringRunner.class) //This breaks stuff with spock
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) //research this, it appears to clean mongo between tests
 @DataMongoTest
 class UserHandlerIntSpec extends Specification {
     @Autowired
@@ -19,12 +21,12 @@ class UserHandlerIntSpec extends Specification {
     private UserRepository subject
 
     def setup() {
-        println('setup called')
+        println('setup called, not doing anything yet')
     }
 
     def cleanup() {
         println('cleanup called')
-        mongoTemplate.dropCollection(User.class)
+        mongoTemplate.dropCollection(User.class) //might not be needed due to DirtiesContext annotation
     }
 
     def 'simple test'() {
