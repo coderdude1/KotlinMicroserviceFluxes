@@ -5,19 +5,22 @@ import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.server.router
 
+/**
+ * ATM it appears that these routers (alternate to controllers) accept a ServerREqeust
+ * and return a Mono<ServerResponse>, thus really flux/mono's only.
+ */
 @ApiOperation(value="kotlin dsl router")
 fun router(userHandler: UserHandler) = router {
     accept(APPLICATION_JSON).nest {
-//        "/api".nest { //commented out for kotlin and swagger test
+        "/api".nest { //commented out for kotlin and swagger test
             "/users".nest {
                 GET("/", userHandler::getAllUsers)
             }
             "/user".nest {
                 //                PUT("/{id}", userHandler::updateItem)
-//                GET("/{id}", userHandler::getItem)
-//                POST("/add", userHandler::addUser)
+                GET("/{id}", userHandler::getUserById)
                 POST("/", userHandler::addUser)
             }
         }
-//    } //commented "/api"
+    }
 }

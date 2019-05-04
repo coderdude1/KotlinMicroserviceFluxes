@@ -72,3 +72,10 @@ a solution I've read about seems to be using the openAPI api.json stuff
 1. dockerfy each service, and mongo
 1. mongo transactions
     1 https://www.baeldung.com/spring-data-mongodb-transactions
+    
+    
+## Testing goals
+1.  basic spock unit tests
+1.  spock integration tests (not testing endpoints, just handlers down.)
+1.  spock acceptance tests - ie tests that can hit a running service at a known port/address
+1.  spring and spock controller tests (with and without running service instances)

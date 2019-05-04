@@ -9,25 +9,38 @@ import spock.lang.Specification
 
 import java.time.Duration
 
+/**
+ * acceptanceTesting using WebClient and WebTestClient to learn the capabilities of each.
+ *
+ */
 class UserAcceptanceSpec extends Specification {
 //alternate way to create the WebClient
 //    WebClient webClient = WebClient.create("http://localhost:8080/api")
 
-    WebClient webClient = WebClient.builder()
-            .baseUrl("http://localhost:8080/api")
-            .build()
+//    WebClient webClient = WebClient.create()
+    WebClient webClient
+
+
+//            WebClient.builder()
+//            .baseUrl("http://localhost:8080/api/user/")
+//            .build()
 
     WebTestClient webTestClient
 
     def setup() {
+        webClient = WebClient.create("http://localhost:8080/api/")
+
         webTestClient =  WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofMillis(30000)) //when using an Interval on sending side to slow it down
                 .baseUrl("http://localhost:8080/api")
                 .build()
+
+        //TODO add deleteAll endpoint, call it to start fresh on acc tests
+        //TODO create testFixture to allow better acc testing
     }
 
-    def 'add a new user with POST'() {
+    def 'add a new user with POST using a webClient'() {
         given:
         def user = new User('blarg', 'firstName', 'lastName')
 
@@ -48,20 +61,23 @@ class UserAcceptanceSpec extends Specification {
 
     def 'get all users'() {
         given:
-        def blah = webTestClient.get()
-                .uri("/users")
-                .exchange()
-                .expectStatus()
-                    .isOk()
-                .expectHeader()
-                    .contentType(MediaType.APPLICATION_JSON)
-                .expectBodyList(User.class)
-                    .hasSize(5)
-                .returnResult()
+        //create a list of 5 users using the post endpoint
 
         expect:
-        blah
-        //could do some testing of the actual users that came back
+        def results = webTestClient.get()
+                .uri("/users")
+                .exchange()
+                    .expectStatus()
+                        .isOk()
+                    .expectHeader()
+                        .contentType(MediaType.APPLICATION_JSON)
+                    .expectBodyList(User.class)
+                        .hasSize(1)
+                    .returnResult()
+
+        def body = results.getResponseBody()
+        body.size() == 5
+        //check contesnt
     }
 
 //    def 'get a user by id'() {

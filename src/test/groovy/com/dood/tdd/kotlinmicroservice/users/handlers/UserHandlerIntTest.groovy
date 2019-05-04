@@ -5,14 +5,14 @@ import com.dood.tdd.kotlinmicroservice.users.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.test.annotation.DirtiesContext
 import spock.lang.Specification
 
 import java.util.stream.Collectors
 
 // https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/html/boot-features-testing.html
 //@RunWith(SpringRunner.class) //This breaks stuff with spock
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) //research this, it appears to clean mongo between tests
+//DirtiesContext works by creating a new appContext, including a new dtasource (and thus new embedded mongo).  SLow!
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) //research this, it appears to clean mongo between tests
 @DataMongoTest
 class UserHandlerIntSpec extends Specification {
     @Autowired
@@ -26,10 +26,11 @@ class UserHandlerIntSpec extends Specification {
 
     def cleanup() {
         println('cleanup called')
+        //@DIrtiesContext works but slow compared to this since it recreates all beans
         mongoTemplate.dropCollection(User.class) //might not be needed due to DirtiesContext annotation
     }
 
-    def 'simple test'() {
+    def 'findAll simple test'() {
         given:
         def userOne = createUser('oneF', 'oneL')
         def userTwo = createUser('oneF', 'oneL')
@@ -47,6 +48,19 @@ class UserHandlerIntSpec extends Specification {
         users.contains(userTwo)
         users.contains(userThree)
         users.contains(userFour)
+    }
+
+    def 'getById'() {
+        given:
+        def userOne = createUser('oneF', 'oneL')
+        def userTwo = createUser('oneF', 'oneL')
+
+        when:
+        def result = subject.findById(userOne.id)
+
+        then:
+        result != null
+        result.block() == userOne //blocking io, don't normally do that, but this is a test so...
     }
 
     private def createUser(def firstName, def lastName) {
