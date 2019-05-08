@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
 
     //    //swagger.  eventualy look at the dpringdocs for this
     implementation 'io.springfox:springfox-swagger2:3.0.0-SNAPSHOT'

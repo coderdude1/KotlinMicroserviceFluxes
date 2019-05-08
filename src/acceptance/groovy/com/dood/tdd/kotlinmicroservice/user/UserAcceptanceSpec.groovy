@@ -55,14 +55,16 @@ class UserAcceptanceSpec extends Specification {
         then:
         response
         response.statusCode() == HttpStatus.OK //todo figure out 201
-        User retval = response.bodyToMono(User.class).block()
+        User retval = response.bodyToMono(User.class).block() //bad practice for normal code, ie don't block normally
         retval == user
     }
 
     def 'get all users'() {
         given:
-        //create a list of 5 users using the post endpoint
-
+        //create a list of 5 users using the post endpoint.  Need to start with a clean db instance
+        //so these aren't the best tests (ie this will need to call an init or delteAll endpoint,
+        //or have the notion of a projectId or some such to segment testing data from non-testing
+        //currently this test is very brittle, ie run the previous test again and this test fails due to userCounts
         expect:
         def results = webTestClient.get()
                 .uri("/users")
@@ -72,7 +74,7 @@ class UserAcceptanceSpec extends Specification {
                     .expectHeader()
                         .contentType(MediaType.APPLICATION_JSON)
                     .expectBodyList(User.class)
-                        .hasSize(1)
+                        .hasSize(1) //TODO need to have a way to bootstrap a empty collection as this varies then
                     .returnResult()
 
         def body = results.getResponseBody()

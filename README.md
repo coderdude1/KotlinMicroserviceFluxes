@@ -64,7 +64,8 @@ a solution I've read about seems to be using the openAPI api.json stuff
     * Check this out?  https://piotrminkowski.wordpress.com/2019/01/15/kotlin-microservice-with-spring-boot/
 # TODOS
 1. add actuator endpoints
-1. reactive - started
+1. add some non-webflux endpoints
+1. add swagger.  had issues with kotlin webflux dsl (it started, didn't see the endpoints)
 1. refactor into a mono repo for several services
 1. add reactive mongo.
     1. local mongo
@@ -79,3 +80,16 @@ a solution I've read about seems to be using the openAPI api.json stuff
 1.  spock integration tests (not testing endpoints, just handlers down.)
 1.  spock acceptance tests - ie tests that can hit a running service at a known port/address
 1.  spring and spock controller tests (with and without running service instances)
+
+
+#Docker
+some resources. 
+    [Memory management in a container](https://medium.com/@yortuc/jvm-memory-allocation-in-docker-container-a26bbce3a3f2)
+    [spring boot block for docker](https://spring.io/blog/2018/11/08/spring-boot-in-a-container)
+##TODO: 
+1.  versioning jdk.  upgrade to 11
+1.  connect to external mongo instance
+    1. connect to local mongo instance
+    1. connect to mongo container
+1.  build from gradle task.
+

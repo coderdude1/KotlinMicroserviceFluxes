@@ -9,8 +9,16 @@ spring:
       database: reactiveKotlinExperiment
 #      username: user # TODO need to enable mongo auth, create user/pass/roles, etc
 #      password: password
-#      host: localhost # default is good, but will use this with docker
+ #     host: host.docker.internal # default is good, but will use this with docker //may have worked actually
+      host: mongo # defined in docker-comose.yml.  need to inject this via prop might be more flexible
 #      port: 27017
+
+#Actuator 2.x
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 logging:
   level:
