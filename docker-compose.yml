@@ -1,16 +1,21 @@
 version: "3.7"
 services:
   web:
-    build: . #todo does this result in a new build?
+#    image: # points to an existing image. TODO
+    build: . #instructions on building if the above image does not exist, think this is location of Dockerfile
     ports:
       - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_URL = mongodb://mongodb/reactiveKotlinExperiment #override default in application.yml
+#      logging.level.org.mongodb: DEBUG
     depends_on:
-      - mongo  #note the name is 'mongo' that we use to create the container
-  mongo:  #this name is what the web service uses in the depends_on
+      - mongodb  #note the name is 'mongo' that we use to create the container
+  mongodb:  #this name is what the web service uses in the depends_on
     image: mongo
     ports:
-      - "27017:27017"
+      - 27017:27017
     volumes:
       - mongo-volume:/data/db
+
 volumes:
-  mongo-volume: #created via docker cli in host
+  mongo-volume: #created via docker cli in host with 'docker volume create monogo-volume'

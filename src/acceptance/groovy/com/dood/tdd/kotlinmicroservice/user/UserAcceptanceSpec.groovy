@@ -19,7 +19,7 @@ class UserAcceptanceSpec extends Specification {
 
 //    WebClient webClient = WebClient.create()
     WebClient webClient
-
+    def port = 8081
 
 //            WebClient.builder()
 //            .baseUrl("http://localhost:8080/api/user/")
@@ -28,12 +28,14 @@ class UserAcceptanceSpec extends Specification {
     WebTestClient webTestClient
 
     def setup() {
-        webClient = WebClient.create("http://localhost:8080/api/")
+        //seeing this java.lang.UnsupportedOperationException: Reflective setAccessible(true) disabled
+        //but still works
+        webClient = WebClient.create("http://localhost:${port}/api/")
 
         webTestClient =  WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofMillis(30000)) //when using an Interval on sending side to slow it down
-                .baseUrl("http://localhost:8080/api")
+                .baseUrl("http://localhost:${port}/api")
                 .build()
 
         //TODO add deleteAll endpoint, call it to start fresh on acc tests
@@ -42,7 +44,7 @@ class UserAcceptanceSpec extends Specification {
 
     def 'add a new user with POST using a webClient'() {
         given:
-        def user = new User('blarg', 'firstName', 'lastName')
+        def user = new User(null, 'firstName', 'lastName')
 
         when:
         def response = webClient.post()
@@ -56,7 +58,10 @@ class UserAcceptanceSpec extends Specification {
         response
         response.statusCode() == HttpStatus.OK //todo figure out 201
         User retval = response.bodyToMono(User.class).block() //bad practice for normal code, ie don't block normally
-        retval == user
+//        retval == user
+        retval.firstName == user.firstName
+        retval.lastName == user.lastName
+        retval.id != null
     }
 
     def 'get all users'() {
@@ -74,11 +79,11 @@ class UserAcceptanceSpec extends Specification {
                     .expectHeader()
                         .contentType(MediaType.APPLICATION_JSON)
                     .expectBodyList(User.class)
-                        .hasSize(1) //TODO need to have a way to bootstrap a empty collection as this varies then
+                        .hasSize(2) //TODO need to have a way to bootstrap a empty collection as this varies then
                     .returnResult()
 
         def body = results.getResponseBody()
-        body.size() == 5
+        body.size() == 2
         //check contesnt
     }
 
